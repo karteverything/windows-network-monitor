@@ -16,13 +16,18 @@ def create_icon(text):
 
     return img
 
+def format_speed(speed):
+    if speed > 1024:
+        return f"{speed/1024:.1f}M"
+    return f"{speed}K"
+
 def update_icon(icon):
     while True:
         try:
             up, down = monitor.get_speed()
 
             # format text (KB/s)
-            text = f"{down}↓\n{up}↑"
+            text = f"{format_speed(down)}↓\n{format_speed(up)}↑"
 
             icon.icon = create_icon(text)
             icon.title = f"Download: {down} KB/s | Upload: {up} KB/s"
