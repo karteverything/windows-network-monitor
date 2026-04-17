@@ -2,6 +2,7 @@ import threading
 from PIL import Image, ImageDraw, ImageFont
 import pystray
 from app.monitor import NetWorkMonitor
+import time
 
 monitor = NetWorkMonitor()
 
@@ -17,20 +18,28 @@ def create_icon(text):
 
 def update_icon(icon):
     while True:
-        up, down = monitor.get_speed()
+        try:
+            up, down = monitor.get_speed()
 
-        # format text (KB/s)
-        text = f"{down}↓\n{up}↑"
+            # format text (KB/s)
+            text = f"{down}↓\n{up}↑"
 
-        icon.icon = create_icon(text)
-        icon.title = f"Download: {down} KB/s | Upload: {up} KB/s"
+            icon.icon = create_icon(text)
+            icon.title = f"Download: {down} KB/s | Upload: {up} KB/s"
+
+            time.sleep(1)
+
+        except Exception as e:
+            print("Error updating icon:", e)
+            time.sleep(1)
 
 def run_tray():
-    icon = pystray.Icon("NetSpeed")
+    # create initial icon
+    # pass icon at creation time
+    icon = pystray.Icon("NetSpeed", create_icon("0↓\n0↑"))
 
     # strart updating in background thread
     thread = threading.Thread(target=update_icon, args=(icon,), daemon=True)
     thread.start()
 
     icon.run()
-    
