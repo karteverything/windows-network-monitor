@@ -1,12 +1,16 @@
 import psutil
 import time
 
-def get_speed(interval = 1):
-    net1 = psutil.net_io_counters()
-    time.sleep(interval)
-    net2 = psutil.net_io_counters()
+class NetWorkMonitor:
+    def __init__(self):
+        self.last = psutil.net_io_counters()
 
-    upload = (net2.bytes_sent - net1.bytes_sent) / 1024
-    download = (net2.bytes_recv - net1.bytes_recv) / 1024
+    def get_speed(self, interval = 1):
+        time.sleep(interval)
+        current = psutil.net_io_counters()
 
-    return int(upload), int(download)
+        upload = (net2.bytes_sent - net1.bytes_sent) / 1024
+        download = (net2.bytes_recv - net1.bytes_recv) / 1024
+
+        self.last = current
+        return int(upload), int(download)
