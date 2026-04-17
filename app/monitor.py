@@ -9,8 +9,8 @@ class NetWorkMonitor:
         time.sleep(interval)
         current = psutil.net_io_counters()
 
-        upload = (net2.bytes_sent - net1.bytes_sent) / 1024
-        download = (net2.bytes_recv - net1.bytes_recv) / 1024
+        upload = (current.bytes_sent - self.bytes_sent) / 1024
+        download = (current.bytes_recv - self.bytes_recv) / 1024
 
         self.last = current
         return int(upload), int(download)
