@@ -1,2 +1,7 @@
-def run_tray():
-    print("Tray app coming soon...")
+import threading
+from PIL import Image, ImageDraw, ImageFont
+import pystray
+from app.monitor import NetWorkMonitor
+
+monitor = NetWorkMonitor()
+
