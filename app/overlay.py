@@ -1,7 +1,7 @@
 import tkinter as tk
-from app.monitor import NetWorkMonitor, format_speed
+from app.monitor import NetworkMonitor, format_speed
 
-monitor = NetWorkMonitor()
+monitor = NetworkMonitor()
 
 def run_overlay():
     root = tk.Tk()
@@ -50,7 +50,7 @@ def run_overlay():
         text="0.0M ↓",
         font=("Segoe UI", 9),
         fg="#FFFFFF",
-        bg=bg_color
+        bg=bg_color,
         width=8
     )
     down_label.pack(anchor="e")
