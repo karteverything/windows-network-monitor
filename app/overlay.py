@@ -18,8 +18,8 @@ def run_overlay():
     root.configure(bg=bg_color)
 
     # define explicit dimensions
-    WINDOW_WIDTH = 90
-    WINDOW_HEIGHT = 45
+    WINDOW_WIDTH = 100
+    WINDOW_HEIGHT = 50
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
