@@ -17,7 +17,23 @@ def run_overlay():
     bg_color = "#111111"
     root.configure(bg=bg_color)
 
-    # dragging functionality
+    # define explicit dimensions
+    WINDOW_WIDTH = 90
+    WINDOW_HEIGHT = 45
+
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    x = screen_width - WINDOW_WIDTH - 20
+    y = screen_height - WINDOW_HEIGHT - 60
+
+    # set fixed width and height in grometry
+    root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x}+{y}")
+
+    # prevent child widgets from changing root window size
+    root.pack_propagate(False)
+
+    # dragging func (fixed size while dragging)
     def start_move(event):
         root.x = event.x
         root.y = event.y
@@ -31,14 +47,12 @@ def run_overlay():
         deltay = event.y - root.y 
         x = root.winfo_x() + deltax
         y = root.winfo_y() + deltay
-        root.geometry(f"+{x}+{y}")
+        root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x}+{y}")
 
     # bind dragging and right-click to exit
     root.bind("<ButtonPress-1>", start_move)
     root.bind("<ButtonRelease-1>", stop_move)
     root.bind("<B1-Motion>", do_move)
-    # righ-click exists
-    # root.bind("<Button-3>", lambda e: root.destroy())
     
     # create right-click menu
     context_menu = tk.Menu(root, tearoff=0, bg="black", fg="white")
@@ -52,16 +66,15 @@ def run_overlay():
 
     # container frame
     frame = tk.Frame(root, bg=bg_color)
-    frame.pack(padx=8, pady=4)
+    frame.pack(expand=True, fill="both", padx=6, pady=4)
 
     # download
     down_label = tk.Label(
         frame,
         text="0.0 ↓",
-        font=("Segoe UI", 8),
+        font=("Consolas", 9),
         fg="#FFFFFF",
-        bg=bg_color,
-        width=8
+        bg=bg_color
     )
     down_label.pack(anchor="e")
 
@@ -69,7 +82,7 @@ def run_overlay():
     up_label = tk.Label(
         frame, 
         text="0 ↑",
-        font=("Segoe UI", 8),
+        font=("Consolas", 9),
         fg="#BBBBBB",
         bg=bg_color
     )
