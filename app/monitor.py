@@ -4,8 +4,8 @@ import time
 def format_speed(speed):
     # moved from overlay to prevent duplication
     if speed >= 1024:
-        return f"{speed / 1024:.1f} MB/s"
-    return f"{speed:.1f} KB/s"
+        return f"{speed / 1024:.1f}MB/s"
+    return f"{speed:.1f}KB/s"
 
 class NetworkMonitor:
     def __init__(self):
