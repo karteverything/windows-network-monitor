@@ -1,6 +1,12 @@
 import psutil
 
-class NetWorkMonitor:
+def format_speed(speed):
+    # moved from overlay to prevent duplication
+    if speed >= 1024:
+        return f"{speed / 1024:.1f}M"
+    return f"{speed:.1f}K"
+
+class NetworkMonitor:
     def __init__(self):
         net = psutil.net_io_counters()
         self.bytes_sent = net.bytes_sent
