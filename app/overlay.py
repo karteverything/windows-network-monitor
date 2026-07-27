@@ -29,8 +29,8 @@ def run_overlay():
     def do_move(event):
         deltax = event.x - root.x 
         deltay = event.y - root.y 
-        x = root.winfo_x + deltax
-        y = root.winfo_y + deltay
+        x = root.winfo_x() + deltax
+        y = root.winfo_y() + deltay
         root.geometry(f"+{x}+{y}")
 
     # bind dragging and right-click to exit
