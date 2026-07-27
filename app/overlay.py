@@ -38,7 +38,17 @@ def run_overlay():
     root.bind("<ButtonRelease-1>", stop_move)
     root.bind("<B1-Motion>", do_move)
     # righ-click exists
-    root.bind("<Button-3>", lambda e: root.destroy())
+    # root.bind("<Button-3>", lambda e: root.destroy())
+    
+    # create right-click menu
+    context_menu = tk.Menu(root, tearoff=0, bg="black", fg="white")
+    context_menu.add_command(label="Exit Monitor", command=root.destroy)
+
+    def show_menu(event):
+        context_menu.tk_popup(event.x_root, event.y_root)
+
+    # bind righ-click to show menu instead of instant exit
+    root.bind("<Button-3>", show_menu)
 
     # container frame
     frame = tk.Frame(root, bg=bg_color)
