@@ -1,7 +1,8 @@
 import threading
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import pystray
-from app.monitor import NetWorkMonitor
+from pystray import MenuItem as item
+from app.monitor import NetWorkMonitor, format_speed
 import time
 
 monitor = NetWorkMonitor()
@@ -10,22 +11,15 @@ def create_icon(text):
     # create small icon 
     img = Image.new("RGB", (64, 64), (20, 20, 20))
     draw = ImageDraw.Draw(img)
-
     # basic font
     draw.text((5, 10), text, fill="white")
 
     return img
 
-def format_speed(speed):
-    if speed > 1024:
-        return f"{speed/1024:.1f}M"
-    return f"{speed}K"
-
 def update_icon(icon):
-    while True:
+    while icon.visible: # stops thread if icon is closed
         try:
             up, down = monitor.get_speed()
-
             # format text (KB/s)
             text = f"{format_speed(down)}↓\n{format_speed(up)}↑"
 
@@ -38,7 +32,13 @@ def update_icon(icon):
             print("Error updating icon:", e)
             time.sleep(1)
 
+def quit_action(icon):
+    icon.stop()
+
 def run_tray():
+    # add menu so user can quit the app
+    menu = pystray.Menu(item('Quit', quit_action))
+    
     # create initial icon
     # pass icon at creation time
     icon = pystray.Icon("NetSpeed", create_icon("0↓\n0↑"))
