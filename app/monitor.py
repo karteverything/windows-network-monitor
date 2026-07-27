@@ -9,8 +9,8 @@ class NetWorkMonitor:
     def get_speed(self, interval = 1):
         current = psutil.net_io_counters()
 
-        upload = (current.bytes_sent - self.bytes_sent) / 1024
-        download = (current.bytes_recv - self.bytes_recv) / 1024
+        upload = (current.bytes_sent - self.bytes_sent) / 1024 / interval
+        download = (current.bytes_recv - self.bytes_recv) / 1024 / interval
 
         # update stored values
         self.bytes_sent = current.bytes_sent
