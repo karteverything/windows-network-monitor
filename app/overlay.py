@@ -1,27 +1,44 @@
 import tkinter as tk
-from app.monitor import NetWorkMonitor
+from app.monitor import NetWorkMonitor, format_speed
 
 monitor = NetWorkMonitor()
 
-def format_speed(speed):
-    if speed > 1024:
-        return f"{speed/1024:.1f}M"
-    return f"{speed}K"
-
 def run_overlay():
     root = tk.Tk()
+
     # remove window borders
     root.overrideredirect(True)
     # always on top
     root.attributes("-topmost", True)
-
     # transparency
     root.attributes("-alpha", 0.85)
 
     # background
     bg_color = "#111111"
-
     root.configure(bg=bg_color)
+
+    # dragging functionality
+    def start_move(event):
+        root.x = event.x
+        root.y = event.y
+
+    def stop_move(event):
+        root.x = None
+        root.y = None
+
+    def do_move(event):
+        deltax = event.x - root.x 
+        deltay = event.y - root.y 
+        x = root.winfo_x + deltax
+        y = root.winfo_y + deltay
+        root.geometry(f"+{x}+{y}")
+
+    # bind dragging and right-click to exit
+    root.bind("<ButtonPress-1>", start_move)
+    root.bind("<ButtonRelease-1>", stop_move)
+    root.bind("<B1-Motion>", do_move)
+    # righ-click exists
+    root.bind("<Button-3>", lambda e: root.destroy())
 
     # container frame
     frame = tk.Frame(root, bg=bg_color)
@@ -34,6 +51,7 @@ def run_overlay():
         font=("Segoe UI", 9),
         fg="#FFFFFF",
         bg=bg_color
+        width=8
     )
     down_label.pack(anchor="e")
 
@@ -47,26 +65,20 @@ def run_overlay():
     )
     up_label.pack(anchor="e")
 
-    # position
     root.update_idletasks()
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
 
     # position near the bottom-right
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
-
     x = screen_width - 100
-    y = screen_height - 50
+    y = screen_height - 60
 
     root.geometry(f"+{x}+{y}")
 
     def update():
-        up, down = monitor.get_speed(interval=1)
-
-        down_label.config(text=f"↓: {format_speed(down)}")
-        up_label.config(text=f"↑: {format_speed(up)}")
-
+        up, down = monitor.get_speed()
+        down_label.config(text=f"{format_speed(down)} ↓")
+        up_label.config(text=f"{format_speed(up)} ↑")
         root.after(1000, update)
     
     update()
