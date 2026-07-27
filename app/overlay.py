@@ -57,8 +57,8 @@ def run_overlay():
     # download
     down_label = tk.Label(
         frame,
-        text="0.0M ↓",
-        font=("Segoe UI", 9),
+        text="0.0 ↓",
+        font=("Segoe UI", 8),
         fg="#FFFFFF",
         bg=bg_color,
         width=8
@@ -68,8 +68,8 @@ def run_overlay():
     # upload
     up_label = tk.Label(
         frame, 
-        text="0K ↑",
-        font=("Segoe UI", 9),
+        text="0 ↑",
+        font=("Segoe UI", 8),
         fg="#BBBBBB",
         bg=bg_color
     )
