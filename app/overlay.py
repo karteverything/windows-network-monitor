@@ -100,8 +100,8 @@ def run_overlay():
 
     def update():
         up, down = monitor.get_speed()
-        down_label.config(text=f"{format_speed(down)} ↓")
-        up_label.config(text=f"{format_speed(up)} ↑")
+        down_label.config(text=f"↓:{format_speed(down)}")
+        up_label.config(text=f"↑:{format_speed(up)}")
         root.after(1000, update)
     
     update()
