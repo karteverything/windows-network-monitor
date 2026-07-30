@@ -9,7 +9,7 @@ def run_overlay():
     # remove window borders
     root.overrideredirect(True)
     # always on top
-    root.attributes("-topmost", True)
+    root.attributes("-topmost", False)
     # transparency
     root.attributes("-alpha", 0.85)
 
