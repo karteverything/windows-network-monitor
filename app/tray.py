@@ -38,24 +38,31 @@ def update_icon(icon):
 def quit_action(icon):
     icon.stop()
 
+# strart updating in background thread
+def setup(icon):
+    threading.Thread(
+        target=update_icon, 
+        args=(icon,), 
+        daemon=True
+    ).start()
+    
+    
 def run_tray():
     # add menu so user can quit the app
-    menu = pystray.Menu(item('Quit', quit_action))
+    menu = pystray.Menu(
+        item('Quit', quit_action)
+    )
     
     # create initial icon
     # pass icon at creation time
     icon = pystray.Icon(
         "NetSpeed", 
         create_icon("0↓\n0↑"),
-        menu=menu
+        "Network Monitor",
+        menu
     )
 
-    # strart updating in background thread
-    def setup(icon):
-        threading.Thread(
-        target=update_icon, 
-        args=(icon,), 
-        daemon=True
-    ).start()
-
     icon.run(setup=setup)
+    
+
+
