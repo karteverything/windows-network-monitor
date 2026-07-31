@@ -24,7 +24,10 @@ def update_icon(icon):
             text = f"{format_speed(down)}↓\n{format_speed(up)}↑"
 
             icon.icon = create_icon(text)
-            icon.title = f"Download: {down} KB/s | Upload: {up} KB/s"
+            icon.title = (
+                f"Upload: {format_speed(up)}\n"
+                f"Download: {format_speed(down)}"
+            )
 
             time.sleep(1)
 
