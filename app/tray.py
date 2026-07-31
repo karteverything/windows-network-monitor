@@ -2,10 +2,10 @@ import threading
 from PIL import Image, ImageDraw
 import pystray
 from pystray import MenuItem as item
-from app.monitor import NetWorkMonitor, format_speed
+from app.monitor import NetworkMonitor, format_speed
 import time
 
-monitor = NetWorkMonitor()
+monitor = NetworkMonitor()
 
 def create_icon(text):
     # create small icon 
@@ -48,7 +48,11 @@ def run_tray():
     )
 
     # strart updating in background thread
-    thread = threading.Thread(target=update_icon, args=(icon,), daemon=True)
-    thread.start()
+    def setup(icon):
+        threading.Thread(
+        target=update_icon, 
+        args=(icon,), 
+        daemon=True
+    ).start()
 
-    icon.run()
+    icon.run(setup=setup)
