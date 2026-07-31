@@ -17,17 +17,17 @@ def create_icon(text):
     return img
 
 def update_icon(icon):
-    while icon.visible: # stops thread if icon is closed
+    # stops thread if icon is closed
+    while True: 
         try:
             up, down = monitor.get_speed()
-            # format text (KB/s)
-            text = f"{format_speed(down)}↓\n{format_speed(up)}↑"
 
-            icon.icon = create_icon(text)
-            icon.title = (
-                f"Upload: {format_speed(up)}\n"
-                f"Download: {format_speed(down)}"
+            # format speed
+            text = (
+                f"↑: {format_speed(up)}\n"
+                f"↓: {format_speed(down)}"
             )
+            icon.icon = create_icon(text)
 
             time.sleep(1)
 
