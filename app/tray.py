@@ -5,17 +5,14 @@ from pystray import MenuItem as item
 from app.monitor import NetworkMonitor, format_speed
 import time
 import os
+from pathlib import Path
+
+# define image path
+BASE_DIR = Path(__file__).resolve().parent.parent
+ASSETS_DIR = BASE_DIR / "assets"
+ICON_PATH = ASSETS_DIR / "icon.png"
 
 monitor = NetworkMonitor()
-
-def create_icon(text):
-    # create small icon 
-    img = Image.new("RGB", (64, 64), (20, 20, 20))
-    draw = ImageDraw.Draw(img)
-    # basic font
-    draw.text((5, 10), text, fill="white")
-
-    return img
 
 def update_icon(icon):
     # stops thread if icon is closed
@@ -24,23 +21,23 @@ def update_icon(icon):
             up, down = monitor.get_speed()
 
             # format speed
-            text = (
+            icon.title = (
                 f"↑: {format_speed(up)}\n"
                 f"↓: {format_speed(down)}"
             )
-            icon.icon = create_icon(text)
-
+            # update every second
             time.sleep(1)
 
         except Exception as e:
-            print("Error updating icon:", e)
+            print("Tray error:", e)
             time.sleep(1)
 
+# quits app
 def quit_action(icon):
     icon.stop()
     os._exit(0)
 
-# strart updating in background thread
+# called once tray icon is visible
 def setup(icon):
     threading.Thread(
         target=update_icon, 
@@ -50,21 +47,29 @@ def setup(icon):
     
     
 def run_tray():
-    # add menu so user can quit the app
+    # check if icon exists
+    if not ICON_PATH.exists():
+        raise FileNotFoundError(
+            f"Could not find icon: \n{ICON_PATH}"
+        )
+
+    icon_image = Image.open(ICON_PATH)
+    
+    # attach 'quit app' to menu
     menu = pystray.Menu(
         item('Quit', quit_action)
     )
     
     # create initial icon
     # pass icon at creation time
-    icon = pystray.Icon(
-        "NetSpeed", 
-        create_icon("0↓\n0↑"),
+    tray_icon = pystray.Icon(
+        "NetworkMonitor", 
+        icon_image,
         "Network Monitor",
-        menu
+        menu,
     )
 
-    icon.run(setup=setup)
+    tray_icon.run(setup=setup)
     
 
 
