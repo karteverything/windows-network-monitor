@@ -41,7 +41,11 @@ def run_tray():
     
     # create initial icon
     # pass icon at creation time
-    icon = pystray.Icon("NetSpeed", create_icon("0↓\n0↑"))
+    icon = pystray.Icon(
+        "NetSpeed", 
+        create_icon("0↓\n0↑"),
+        menu=menu
+    )
 
     # strart updating in background thread
     thread = threading.Thread(target=update_icon, args=(icon,), daemon=True)
