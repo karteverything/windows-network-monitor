@@ -4,6 +4,7 @@ import pystray
 from pystray import MenuItem as item
 from app.monitor import NetworkMonitor, format_speed
 import time
+import os
 
 monitor = NetworkMonitor()
 
@@ -37,6 +38,7 @@ def update_icon(icon):
 
 def quit_action(icon):
     icon.stop()
+    os._exit(0)
 
 # strart updating in background thread
 def setup(icon):
