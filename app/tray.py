@@ -9,8 +9,7 @@ from pathlib import Path
 
 # define image path
 BASE_DIR = Path(__file__).resolve().parent.parent
-ASSETS_DIR = BASE_DIR / "assets"
-ICON_PATH = ASSETS_DIR / "icon.png"
+ICON_PATH = BASE_DIR / "assets" / "icon.png"
 
 monitor = NetworkMonitor()
 
