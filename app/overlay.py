@@ -9,7 +9,7 @@ def run_overlay():
     # remove window borders
     root.overrideredirect(True)
     # always on top
-    root.attributes("-topmost", False)
+    root.attributes("-topmost", True)
     # transparency
     root.attributes("-alpha", 0.85)
 
@@ -18,8 +18,8 @@ def run_overlay():
     root.configure(bg=bg_color)
 
     # define explicit dimensions
-    WINDOW_WIDTH = 100
-    WINDOW_HEIGHT = 50
+    WINDOW_WIDTH = 105
+    WINDOW_HEIGHT = 45
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
@@ -27,7 +27,7 @@ def run_overlay():
     x = screen_width - WINDOW_WIDTH - 20
     y = screen_height - WINDOW_HEIGHT - 60
 
-    # set fixed width and height in grometry
+    # set fixed width and height in geometry
     root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}+{x}+{y}")
 
     # prevent child widgets from changing root window size
@@ -61,47 +61,74 @@ def run_overlay():
     def show_menu(event):
         context_menu.tk_popup(event.x_root, event.y_root)
 
-    # bind righ-click to show menu instead of instant exit
+    # bind right-click to show menu instead of instant exit
     root.bind("<Button-3>", show_menu)
 
     # container frame
     frame = tk.Frame(root, bg=bg_color)
-    frame.pack(expand=True, fill="both", padx=6, pady=4)
+    frame.pack(expand=True, fill="both", padx=6, pady=2)
 
-    # download
+    # make second column expand
+    frame.columnconfigure(1, weight=1)
+
+    # download arrow
     down_label = tk.Label(
         frame,
-        text="0.0 ↓",
+        text="↓:",
         font=("Consolas", 9),
         fg="#FFFFFF",
         bg=bg_color
     )
-    down_label.pack(anchor="e")
+    down_label.grid(row=1, column=0, sticky="w")
 
-    # upload
+    # download speed
+    down_speed = tk.Label(
+        frame, 
+        text="0 KB/s",
+        font=("Consolas", 9),
+        fg="#FFFFFF",
+        bg=bg_color,
+        anchor="e",
+    )
+    down_speed.grid(row=1, column=1, sticky="e")
+
+    # upload arrow
     up_label = tk.Label(
         frame, 
-        text="0 ↑",
+        text="↑:",
         font=("Consolas", 9),
         fg="#BBBBBB",
         bg=bg_color
     )
-    up_label.pack(anchor="e")
+    up_label.grid(row=0, column=0, sticky="w")
 
-    root.update_idletasks()
+    # upload speed
+    up_speed = tk.Label(
+        frame, 
+        text="0 KB/s",
+        font=("Consolas", 9),
+        fg="#BBBBBB",
+        bg=bg_color,
+        anchor="e",
+    )
+    up_speed.grid(row=0, column=1, sticky="e")
+
+    # root.update_idletasks()
 
     # position near the bottom-right
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
-    x = screen_width - 100
-    y = screen_height - 60
+    # screen_width = root.winfo_screenwidth()
+    # screen_height = root.winfo_screenheight()
+    # x = screen_width - 100
+    # y = screen_height - 60
 
-    root.geometry(f"+{x}+{y}")
+    # root.geometry(f"+{x}+{y}")
 
     def update():
         up, down = monitor.get_speed()
-        down_label.config(text=f"↓: {format_speed(down)}")
-        up_label.config(text=f"↑: {format_speed(up)}")
+
+        down_speed.config(text=format_speed(down))
+        up_speed.config(text=format_speed(up))
+
         root.after(1000, update)
     
     update()
