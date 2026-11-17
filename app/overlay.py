@@ -2,7 +2,7 @@ import tkinter as tk
 from app.monitor import (NetworkMonitor, format_speed, format_data)
 monitor = NetworkMonitor()
 
-def run_overlay():
+def run_overlay(command_queue):
 
     root = tk.Tk()
     # Remove window borders

@@ -45,7 +45,7 @@ def setup(icon):
     ).start()
     
     
-def run_tray():
+def run_tray(command_queue):
     # check if icon exists
     if not ICON_PATH.exists():
         raise FileNotFoundError(
@@ -55,7 +55,17 @@ def run_tray():
     icon_image = Image.open(ICON_PATH)
     
     # attach 'quit app' to menu
+    # menu = pystray.Menu(
+    #    item('Quit', quit_action)
+    #)
+
+    # restore overlay when 'open' is clicked
+    def restore_action(icon, item):
+        command_queue.put("restore")
+
+    # attach actions to tray menu
     menu = pystray.Menu(
+        item('Open', restore_action, default=True),
         item('Quit', quit_action)
     )
     
