@@ -45,7 +45,7 @@ def setup(icon):
     ).start()
     
     
-def run_tray():
+def run_tray(command_queue):
     # check if icon exists
     if not ICON_PATH.exists():
         raise FileNotFoundError(
