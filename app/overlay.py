@@ -65,10 +65,17 @@ def run_overlay(command_queue):
         fg="white"
     )
 
+    # add exit option
     context_menu.add_command(
         label="Exit Monitor",
         command=root.destroy
     )
+
+    # add minimize option
+    context_menu.add_command(
+    label="Minimize to Tray",
+    command=root.withdraw
+)
 
     def show_menu(event):
         context_menu.tk_popup(
