@@ -1,4 +1,5 @@
 import tkinter as tk
+import queue
 from app.monitor import (NetworkMonitor, format_speed, format_data)
 monitor = NetworkMonitor()
 
@@ -277,6 +278,24 @@ def run_overlay(command_queue):
             "<Leave>",
             hide_tooltip
         )
+
+    # -----------------------------
+    # TRAY COMMAND LISTENER
+    # -----------------------------
+    def check_tray_commands():
+        try:
+            while True:
+                command = command_queue.get_nowait()
+
+                if command == "restore":
+                    root.deiconify()
+                    root.lift()
+                    root.attributes("-topmost", True)
+        except queue.Empty:
+            pass
+
+        root.after(200, check_tray_commands)
+    check_tray_commands()
 
     # -----------------------------
     # SPEED UPDATE
