@@ -38,6 +38,10 @@ def quit_action(icon):
 
 # called once tray icon is visible
 def setup(icon):
+    # make tray icon visible in taskbar
+    icon.visible = True
+
+    # start the background speed-update thread
     threading.Thread(
         target=update_icon, 
         args=(icon,), 
@@ -46,39 +50,34 @@ def setup(icon):
     
     
 def run_tray(command_queue):
-    # check if icon exists
     if not ICON_PATH.exists():
         raise FileNotFoundError(
             f"Could not find icon: \n{ICON_PATH}"
         )
 
+    print("1. Loading tray image...")
     icon_image = Image.open(ICON_PATH)
-    
-    # attach 'quit app' to menu
-    # menu = pystray.Menu(
-    #    item('Quit', quit_action)
-    #)
 
-    # restore overlay when 'open' is clicked
+    print("2. Creating tray menu...")
+
     def restore_action(icon, item):
         command_queue.put("restore")
 
-    # attach actions to tray menu
     menu = pystray.Menu(
         item('Open', restore_action, default=True),
         item('Quit', quit_action)
     )
-    
-    # create initial icon
-    # pass icon at creation time
+
+    print("3. Creating tray icon...")
+
     tray_icon = pystray.Icon(
-        "NetworkMonitor", 
+        "NetworkMonitor",
         icon_image,
         "Network Monitor",
         menu,
     )
 
+    print("4. Starting tray icon...")
     tray_icon.run(setup=setup)
-    
 
-
+    print("5. Tray icon stopped.")
